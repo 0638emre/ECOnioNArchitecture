@@ -27,5 +27,13 @@ namespace Application.Features.Brands.Rules
                 throw new BusinessException("Marka isimleri aynı olamaz.");
             }
         }
+
+        public void BrandShouldExistWhenRequested(Brand brand)
+        {
+            if (brand == null) 
+            {
+                throw new BusinessException("Requested brand does not exist !");
+            }
+        }
     }
 }

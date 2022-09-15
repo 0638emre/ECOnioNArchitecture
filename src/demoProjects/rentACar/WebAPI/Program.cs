@@ -30,7 +30,7 @@ if (app.Environment.IsDevelopment())
 }
 
 #region middleware olarak çalýþýyor ve dönen hata mesajýný config ettiðimiz þekilde döndürüyor development tarafýnda hatalarý görmek için kapatýrýz.
-if (!app.Environment.IsProduction())
+//if (!app.Environment.IsProduction())
     app.ConfigureCustomExceptionMiddleware();
 
 #endregion
