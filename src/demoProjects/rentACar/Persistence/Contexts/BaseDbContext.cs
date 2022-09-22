@@ -13,13 +13,12 @@ namespace Persistence.Contexts
     {
         protected IConfiguration Configuration { get; set; }
         public DbSet<Brand> Brands { get; set; }
+        public DbSet<Model> Model { get; set; }
        
-
         public BaseDbContext(DbContextOptions dbContextOptions, IConfiguration configuration) : base(dbContextOptions)
         {
             Configuration = configuration;
         }
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -28,22 +27,31 @@ namespace Persistence.Contexts
 
            
         }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Brand>(a =>
+            modelBuilder.Entity<Brand>(b =>
             {
-                a.ToTable("Brands").HasKey(k => k.Id);
-                a.Property(p => p.Id).HasColumnName("Id");
-                a.Property(p => p.Name).HasColumnName("Name");
+                b.ToTable("Brands").HasKey(k => k.Id);
+                b.Property(p => p.Id).HasColumnName("Id");
+                b.Property(p => p.Name).HasColumnName("Name");
+                b.HasMany(p => p.Models);
             });
 
-
+            modelBuilder.Entity<Model>(m =>
+            {
+                m.ToTable("Models").HasKey(k => k.Id);
+                m.Property(p => p.Id).HasColumnName("Id");
+                m.Property(p => p.BrandId).HasColumnName("BrandId");
+                m.Property(p => p.Name).HasColumnName("Name");
+                m.Property(p => p.DailyPrice).HasColumnName("DailyPrice");
+                m.Property(p => p.ImageUrl).HasColumnName("ImageUrl");
+            });
 
             Brand[] brandEntitySeeds = { new(1, "BMW"), new(2, "Mercedes") };
             modelBuilder.Entity<Brand>().HasData(brandEntitySeeds);
 
-           
+            Model[] modelEntitySeeds = { new(1, 1, "Series 4", 1500, ""), new(2, 1, "Series 3", 1200, ""), new(3, 3, "A180", 1000, "") };
+            modelBuilder.Entity<Model>().HasData(modelEntitySeeds);
         }
     }
 }
